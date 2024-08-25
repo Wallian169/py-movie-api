@@ -14,7 +14,7 @@ def cinema_list_view(request: HttpRequest) -> HttpResponse:
         movies = Movie.objects.all()
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    else:
+    if request.method == "POST":
         serializer = MovieSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -32,6 +32,6 @@ def cinema_detail_view(request: HttpRequest, pk: int) -> HttpResponse:
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-    else:
+    if request.method == "DELETE":
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
